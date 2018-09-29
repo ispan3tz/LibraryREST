@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+  	<title>ISD Library | Categories</title>
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <div class="container">
+    <div class="jumbotron">
+      <center>
+        <h2 class="user"><span class="glyphicon glyphicon-book"></span> Categories</h2>
+      </center>
+      <div class="container btn-container">
+      <a href = "category-add.html">
+        <button type="button" class="btn btn-primary btn-sm btn-add-smth pull-right">
+          <span class="glyphicon glyphicon-plus"></span> Add Category
+        </button>
+      </a>
+      </div>
+      <div class="table-responsive">          
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name Category</th>
+                <th>Actions</th>
+              </tr>
+          </thead>
+            <tbody id="all-categs">
+              <script id="all-categs2" type="text/template mustache/x-tmpl">
+                  <tr>
+                    <td class="col-sm-1"> {{id_category}} </td>
+                    <td> {{name_category}} </td>
+                    
+                    <td class="col-sm-1"> 
+                      <button class="btn btn-outline" onclick='deleteCategory({{id_category}})'> 
+                      	<span class='glyphicon glyphicon-remove'></span>
+                      </button>
+                    </td>
+                  </tr>
+              </script>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <footer id="footer"></footer>
+<script type="text/javascript">
+  $(function(){
+     
+    
+    getAllCateg( function(obj){
+      
+      console.log(obj);
+      var html = "";
+      $.each(obj, function (i,v){
+        var template = $("#all-categs2").html();
+        html = html + Mustache.to_html(template, v);
+      });
+      $('#all-categs').html(html);
+
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/sal.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/mustache.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/notify.min.js"></script>
+  <title>ISD Library | Assign a book</title>
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <div id="assignview" class="container contain jumbotron">
+      <form class="col-sm-6 col-md-offset-3 form-assign">
+        
+        <div class="form-group">
+        <label for="users">USERS</label>
+            <select class="col-10 form-control"  id="idUser">
+          </select>
+        </div>
+
+
+        <div class="form-group">
+        <label for="books">BOOKS</label>
+            <select  id="idBook" class="col-10 form-control">
+          </select>
+        </div>
+
+        <div class="form-group">
+          <button onclick='insertLoan()' id="assign-book" type="button" class="form-control btn btn-warning">Assign book!</button>
+        </div>
+      </form>
+  </div>
+
+  <footer id="footer"></footer>
+  <script type="text/javascript">
+
+
+    $(function(){
+      getAllUsers(function(users){
+        var html = "";
+        $.each(users, function (index,user){
+          var template = "<option value='{{userID}}'>{{username}}</option>"
+          html = html + Mustache.to_html(template, user);
+        });
+        $("#idUser").html(html);
+      });
+
+      getAllBooks(function(books){
+        var html = "";
+        $.each(books, function (index,book){
+          var template = "<option value='{{id_book}}'>{{title}}</option>"
+          html = html + Mustache.to_html(template, book);
+        });
+        $("#idBook").html(html);
+      });
+
+
+
+
+
+    });
+
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+	<title> ISD Library | Edit Book </title>
+</head>
+<body>
+	<nav id="navbar"></nav>
+	<div id="bookview" class="container contain jumbotron">
+		<script id="bookview2" type="text/template mustache/x-tmpl">
+			<form class="col-sm-6 col-md-offset-3 form-book">
+				<div class="form-group">
+					<label for="isbn" col-form-label">ISBN</label>
+					<div class="col-10">
+						<input class="form-control" value="{{isbn}}" type="text" id="isbn">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="author" col-form-label">Author</label>
+					<div class="col-10">
+						<input class="form-control" value="{{author}}" type="text" id="author">
+					</div>
+				</div>
+				<div class="form-group ">
+					<label for="publisher" col-form-label">Publisher</label>
+					<div class="col-10">
+						<input class="form-control" value="{{publisher}}" type="text" id="publisher">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="title" col-form-label">Title</label>
+					<div class="col-10">
+						<input class="form-control" value="{{title}}" type="text" id="title">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="year" col-form-label">Year</label>
+					<div class="col-10">
+						<input class="form-control" value="{{year}}" type="text" id="year">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="desciption" col-form-label">Description</label>
+					<div class="col-10">
+						<input class="form-control" value="{{description}}" type="text" id="description">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="image" col-form-label">Image Link</label>
+					<div class="col-10">
+						<input class="form-control" value="{{image}}" type="text" id="image">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="status">Status</label>
+					<select class="form-control" id="status">
+						<option value="1">Available</option>
+						<option {{#s}} selected {{/s}} value="0">Not available</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<button onclick='updateBook({{id_book}})' id="update-book" type="button" class="form-control btn btn-warning">Update book!</button>
+				</div>
+			</form>
+		</script>
+	</div>
+	<footer id="footer"></footer>
+	<script>
+		$(function() {
+			var id_book = getUrlParameter("id");
+			getBookById(id_book, function(book){
+				if(book.status == 0) book.s = true;
+				else book.s = false;
+				var template = $("#bookview2").html();
+				var html = Mustache.to_html(template, book);
+				$('#bookview').html(html);
+			});
+		});
+	</script>
+</body>
+</html>

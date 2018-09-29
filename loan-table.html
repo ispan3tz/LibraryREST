@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+	<title>ISD Library | Loans</title>
+</head>
+<body>
+	<div id="header"></div>
+  	<nav id="navbar"></nav>
+  	<div class="container">
+    <div class="jumbotron">
+      <center>
+        <h2 class="user">Loans</h2></center>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+              <tr>
+                <th>ID</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>BookTittle</th>
+                <th>Author</th>
+                <th>DateIssued</th>
+                <th>DateForReturn</th>
+                <th>DateReturned</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+          </thead>
+            <tbody id="all-loans">
+              <script id="loans" type="text/template mustache/x-tmpl">
+                  <tr>
+                    <td> {{id}} </td>
+                    <td> {{userFirstNm}} </td>
+                    <td> {{userLastNm}} </td>
+                    <td> {{titleBook}} </td>
+                    <td> {{authorBook}} </td>
+                    <td> {{dateIssued}} </td>
+                    <td> {{dateForReturn}} </td>
+                    <td> {{dateReturned}} </td>
+                    <td>
+                    <select  onchange='updateLoan({{id}},{{idBook}})' class="loan-status form-control{{id}}" id="status">
+						<option {{#na}} selected {{/na}} value="0">Not Allowed</option>
+						<option {{#q}} selected {{/q}} value="1">Queue For Book</option>
+						<option {{#readb}} selected {{/readb}} value="2">Reading The Book</option>
+						<option {{#br}} selected {{/br}} value="3">Book Returned</option>
+						<option {{#wa}} selected {{/wa}} value="4">Waiting Answer</option>
+                    </select>
+                   </td>
+                   <td>
+                    <div class="btn-group">
+                    <button class="btn btn-outline" onclick='deleteLoanById({{id}})'><span class="glyphicon glyphicon-remove btn-del-loan"></span></button>
+                  </div>
+                  </td>
+                  </tr>
+              </script>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<footer id="footer"></footer>
+<script type="text/javascript">
+$(function(){
+  getAllLoans(function(loans){
+    var html = "";
+    $.each(loans, function (index, loan){
+      if(loan.status==0)loan.na=true;
+      else if(loan.status==1)loan.q=true;
+      else if(loan.status==2)loan.readb=true;
+      else if(loan.status==3)loan.br=true;
+	  else if(loan.status==4)loan.wa=true;
+      var template = $("#loans").html();
+      html = html + Mustache.to_html(template, loan);
+    });
+    $('#all-loans').html(html);
+  });
+});
+</script>
+</body>
+</html>

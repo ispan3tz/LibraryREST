@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+
+	<title>ISD Library</title>
+</head>
+<body>
+<nav id="navbar"></nav>
+<div class="container">
+	<div id="bookview" class="panel panel-default img-panel col-sm-12">
+		<script id="bookview2" type="text/template mustache/x-tmpl">
+			<div class="panel-body img-panel">
+				<div class="col-sm-5">
+					<img class="img-responsive" src="{{image}}" alt="Book cover">
+				</div>
+				<div class="col-sm-7">
+					<p class="title-book text-center"><b>{{title}}</b></p>
+					{{#stat}}
+						<button onclick='borrowBook({{id_book}},4)' type="button" class="btn btn-primary btn-borrow pull-right">Borrow Book</button>
+					{{/stat}}
+					{{^stat}}
+						<button onclick='borrowBook({{id_book}},1)' type="button" class="btn btn-primary btn-wait pull-right">Wait For Book</button>
+					{{/stat}}
+					<table class="table table-hover">
+						<tbody>
+							<tr>
+								<td>Categories:</td>
+								<td><span id="book-categories"></span></td>
+							</tr>
+							<tr>
+								<td>Author:</td>
+								<td>{{author}}</td>
+							</tr>
+							<tr>
+								<td>Year:</td>
+								<td>{{year}}</td>
+							</tr>
+							<tr>
+								<td>Publisher:</td>
+								<td>{{publisher}}</td>
+							</tr>
+							<tr>
+								<td>Status:</td>
+								<td>
+									{{#stat}}
+										<span class="label label-success">Available</span>
+									{{/stat}}
+									{{^stat}}
+										<span class="label label-danger">Not Available</span>
+									{{/stat}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a data-toggle="tab" href="#tab1">Description</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#tab2">Loans</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div id="tab1" class="tab-pane fade in active">
+							{{description}}
+						</div>
+						<div id="tab2" class="tab-pane fade ">
+							<table class="table table-bordered table-hover ">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Issued</th>
+										<th>Returned</th>
+									</tr>
+								</thead>
+								<tbody id="all-loans">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</script>
+	</div>
+</div>
+
+<footer id="footer"></footer>
+<script>
+	$(function() {
+		var id_book = getUrlParameter("id");
+		
+		if(id_book != undefined){
+			getBookById(id_book, function(book){
+				if(book.image == undefined) book.image = "img/bookplaceholder.jpg";
+				if(book.status == 0) book.stat = false;
+				else book.stat = true;
+				var template = $("#bookview2").html();
+				var html = Mustache.to_html(template, book);
+				$('#bookview').html(html);
+				getBookCateg(book.categories);
+				getBookLoans(book.loans);
+			});
+		}else{
+			$.notify("Book id not found","warn");
+		}
+
+		function getBookCateg(categories){
+			var catTemplate = "<button onclick='showBooksByCategory({{id_category}})' type='button' class='btn btn-primary btn-xs btn-cat'>{{name_category}}</button>&nbsp;";
+			var htmlCateg = "";
+			$.each(categories, function (index,categ){
+				htmlCateg = htmlCateg + Mustache.to_html(catTemplate, categ);
+			});
+			$('#book-categories').html(htmlCateg);
+		}
+
+		function getBookLoans(loans){
+			var loansHtml = "";
+			var loansTemplate = "<tr><td>{{userFirstNm}} {{userLastNm}}</td><td>{{dateIssued}}</td><td>{{dateReturned}}</td></tr>";
+			$.each(loans, function (index, loan){
+				loansHtml = loansHtml + Mustache.to_html(loansTemplate, loan);
+			});
+			$('#all-loans').html(loansHtml);
+		}
+	});
+</script>
+
+</body>
+</html>

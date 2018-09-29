@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+	<title>ISD Library | Users</title>
+</head>
+<body>
+	<nav id="navbar"></nav>
+	<div class="container">
+		<div class="jumbotron">
+			<center>
+			<h2 class="users"><span class="glyphicon glyphicon-user"></span>Users</h2>
+			</center>
+			<div class="container btn-container">
+			<a href="user-add.html">
+				<button type="button" class="btn btn-primary btn-sm btn-add-smth pull-right">
+					<span class="glyphicon glyphicon-plus"></span> Add User
+				</button>
+			</a>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Username</th>
+							<th>Firstname</th>
+							<th>Lastname</th>
+							<th>Email</th>
+							<th>Role</th>
+							<th>Date_issued</th>
+							<th>Date_last_login</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="all-users">
+						<script id="all-users2" type="text/template mustache/x-tmpl">
+						<tr>
+							<td> {{userID}} </td>
+							<td> {{username}} </td>
+							<td> {{firstname}} </td>
+							<td> {{lastname}} </td>
+							<td> {{email}} </td>
+							<td> {{role}} </td>
+							<td> {{dateIssued}} </td>
+							<td> {{dateLastLogin}} </td>
+							<td>
+								<div class="btn-group">
+									<button title="Show user" class="btn btn-outline" onclick='showUser({{userID}})'>
+										<span class='glyphicon glyphicon-user'></span>
+									</button>
+									<button title="Update user data" class="btn btn-outline" onclick='updatePageUser({{userID}})'>
+										<span class='glyphicon glyphicon-pencil'></span>
+									</button>
+									{{#account}}
+									<button title="Delete user" class="btn btn-outline" onclick='deleteUser({{userID}})'> 
+										<span class='glyphicon glyphicon-remove'></span>
+									</button>
+									{{/account}}
+								</div>
+							</td>
+						</tr>
+						</script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<footer id="footer"></footer>
+	<script type="text/javascript">
+	$(function(){
+		getAllUsers( function(users){
+			var html = "";
+			$.each(users, function (index,user){
+				if(user.role == 1) user.role = "Admin";
+				else user.role = "User";
+				if(user.username == $.cookie('username')) user.account = false;
+				else user.account = true;
+				var template = $("#all-users2").html();
+				html = html + Mustache.to_html(template, user);
+			});
+			$('#all-users').html(html);
+		});
+	});
+	</script>
+</body>
+</html>

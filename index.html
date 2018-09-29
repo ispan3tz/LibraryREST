@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+	<title>ISD Library</title>
+</head>
+<body>
+	<div id="header"></div>
+	<div class="vertical-center">
+		<div class="container-index text-center">
+		<h1 class="company_name">ISD Library</h1>
+			<form class="form-signin">
+				<div class="form-opacity form-group">
+					<div class="col-10">
+						<input class="form-control login-input" type="text" placeholder="Username" id="username-input" required autofocus>
+					</div>
+				</div>
+				<div class="form-opacity form-group">
+					<div class="col-10">
+						<input class="form-control login-input" type="password" placeholder="Password" id="password-input" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="button" class="form-control btn btn-warning btn-login btn-enter">Let me in!</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript">
+		$(function(){
+			var username = $.cookie("username");
+			var password = $.cookie("password");
+			if(username != undefined && password != undefined)
+				loginUser(username, password);
+		})
+	</script>
+</html>

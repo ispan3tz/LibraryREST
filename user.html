@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/sal.js"></script>
+	<script src="assets/js/mustache.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/notify.min.js"></script>
+	<title>ISD Library | Profile</title>
+</head>
+<body>
+<nav id="navbar"></nav>
+<div class="container">
+	<div class="col-md-5">
+		<div id="userprofile" class="panel panel-default">
+			<script id="userprofile2" type="text/template mustache/x-tmpl">
+				<div class="panel-heading">  
+					{{ username }} profile
+					<a href = "book-assign.html">
+						<button  class='btn btn-outline pull-right'> 
+							<span class='glyphicon glyphicon-pushpin'></span> Assign a book
+						</button>
+					</a>
+					<button onclick='updatePageUser({{userID}})' class='btn btn-outline pull-right'> 
+						<span class='glyphicon glyphicon-pencil'></span> Edit
+					</button>
+
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-6">
+						<div  align="center"> <img alt="User Pic" width="120px" height="120px" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" class="img-circle img-responsive">
+							<input id="profile-image-upload" class="hidden" type="file">
+						</div>
+						<br>
+					<!-- /input-group -->
+					</div>
+					<div class="col-sm-6">
+						<span><h4 style="color:#00b1b1;">{{firstname}} {{lastname}}</h4></span>
+						<span><p>{{role}}</p></span>
+					</div>
+					<table class="table table-hover table-user-information">
+						<tbody>
+							<tr>
+								<td>Username:</td>
+								<td>{{username}}</td>
+							</tr>
+							<tr>
+								<td>First Name:</td>
+								<td>{{firstname}}</td>
+							</tr>
+							<tr>
+								<td>Last Name:</td>
+								<td>{{lastname}}</td>
+							</tr>
+							<tr>
+								<td>Email:</td>
+								<td>{{email}}</td>
+							</tr>
+							<tr>
+								<td>Role:</td>
+								<td>{{role}}</td>
+							</tr>
+							<tr>
+								<td>Joined Library:</td>
+								<td>{{dateIssued}}</td>
+							</tr>
+							<tr>
+								<td>Last Login:</td>
+								<td>{{dateIssued}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</script>
+		</div>
+	</div>
+	<div class="col-md-7">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Loans
+			</div>
+			<div class="panel-body">
+			<div class="table-responsive table-condensed">
+				<table class="table table-bordered table-hover ">
+					<thead>
+						<tr>
+							<th>Book</th>
+							<th>Author</th>
+							<th>Issued</th>
+							<th>Returned</th>
+							<th>Stat</th>
+						</tr>
+					</thead>
+					<tbody id="all-loans">
+					<script id="loans" type="text/template mustache/x-tmpl">
+						<tr>
+							<td> {{titleBook}} </td>
+							<td> {{authorBook}} </td>
+							<td> {{dateIssued}} </td>
+							<td> {{dateReturned}} </td>
+							<td> 
+								{{#na}} Not Allowed {{/na}}
+								{{#q}} Queue For Book {{/q}} 
+								{{#readb}} Reading The Book {{/readb}}
+								{{#br}} Book Returned {{/br}}
+								{{#wa}} Waiting Answer {{/wa}}
+							</td>
+						</tr>
+					</script>
+					</tbody>
+				</table>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+<footer id="footer"></footer>
+<script>
+	$(function() {
+		var id = getUrlParameter("id");
+
+		getUserById(id, function(user){
+			if(user.role == 1) user.role = "Admin";
+			else user.role = "User";
+			var userTemplate = $("#userprofile2").html();
+			var loansTemplate = $("#loans").html();
+			var userHtml = Mustache.to_html(userTemplate, user);
+			var loansHtml = "";
+			$.each(user.loans, function (index, loan){
+				if(loan.status==0)loan.na=true;
+				else if(loan.status==1)loan.q=true;
+				else if(loan.status==2)loan.readb=true;
+				else if(loan.status==3)loan.br=true;
+				else if(loan.status==4)loan.wa=true;
+				loansHtml = loansHtml + Mustache.to_html(loansTemplate, loan);
+			});
+			$('#userprofile').html(userHtml);
+			$('#all-loans').html(loansHtml);
+		});
+	});
+</script>
+</body>
+</html>
